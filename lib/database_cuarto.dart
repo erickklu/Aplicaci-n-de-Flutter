@@ -25,22 +25,35 @@ class DatabaseCuarto {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute(''' CREATE TABLE cliente(
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    apellido TEXT,
-    nombre TEXT,
-    correo TEXT,
-    telefono TEXT
-
-  ) ''');
+    await db.execute('''
+      CREATE TABLE cliente(
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        apellido TEXT,
+        nombre TEXT,
+        correo TEXT,
+        telefono TEXT,
+        sexo TEXT,
+        estado_civil TEXT
+      )
+    ''');
   }
 
   Future<int> insertClient(Map<String, dynamic> client) async {
     try {
       Database db = await database;
-      return await db.insert('clientes', client);
+      return await db.insert('cliente', client);
     } catch (e) {
       print('Error al insertar cliente: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getClients() async {
+    try {
+      Database db = await database;
+      return await db.query('cliente');
+    } catch (e) {
+      print('Error al recuperar clientes: $e');
       rethrow;
     }
   }
